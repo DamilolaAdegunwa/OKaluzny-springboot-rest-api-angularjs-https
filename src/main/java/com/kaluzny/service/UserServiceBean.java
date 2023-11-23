@@ -10,9 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Validated
@@ -39,8 +40,9 @@ public class UserServiceBean implements UserService {
     @Override
     public User saveUser(User user) {
         LOGGER.debug("Save {}", user);
-        User existing = repository.findOne(user.getId());
-        if (existing != null) {
+        //User existing = repository.findOne(user.getId());
+        Optional<User> existing = repository.findById(user.getId());
+        if (!existing.isPresent()) {
             throw new UserAlreadyExistsException(
                     String.format("There already exists a user with id = %s", user.getId()));
         }
@@ -50,7 +52,8 @@ public class UserServiceBean implements UserService {
     @Override
     public User findUserById(long id) {
         LOGGER.debug("Search user by id: " + id);
-        return repository.findOne(id);
+        //return repository.findOne(id);
+        return repository.findById(id).get();
     }
 
     @Override
@@ -70,7 +73,7 @@ public class UserServiceBean implements UserService {
     @Override
     public void deleteUser(Long id) {
         LOGGER.debug("User by id: " + id + " Deleted!");
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     @Override
