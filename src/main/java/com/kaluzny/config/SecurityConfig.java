@@ -16,15 +16,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(new CORSFilter(), UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable()
-                .authorizeRequests()
+                .csrf()//deprecated
+                .disable()
+                .authorizeRequests()//deprecated
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .logout()
+                .logout()//deprecated
                 .permitAll()
-                .and()
-                .httpBasic();
+                .and()//deprecated
+                .httpBasic();//deprecated
         return http.build();
     }
 }
